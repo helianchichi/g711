@@ -1,26 +1,36 @@
 #include<stdio.h>
    
-unsigned char encode(short src)
+unsigned char encode(short src)//-32768 ~ 32767
 {  
-
-        short pcm  = src;
-        int sign = (pcm & 0x8000) >> 8; 
+        int sign = (src & 0x8000) >> 8; //1. 取符号位
         if(sign != 0)
-            pcm = -pcm;
-        if(pcm > 32635)   pcm = 32635;
-        int exponent = 7;
-        int expMask;
-        for(expMask = 0x4000; (pcm & expMask) == 0 && exponent >0; exponent--,expMask >>= 1){}
-        int mantissa = (pcm >> ((exponent == 0) ? 4 : (exponent + 3))) & 0x0f;
-        unsigned char alaw = (unsigned char)(sign | exponent << 4 | mantissa);
-        return (unsigned char)(alaw ^0xD5);   
-        
+            src = -src - 1;
+        int Intensity_3bit = 7;
+        int template = 0x4000; // 0100 0000 0000 0000
+
+        for(; (src & template) == 0 && Intensity_3bit >0; Intensity_3bit--,template >>= 1){}
+        int HighSample_4bit = (src >> ((Intensity_3bit == 0) ? 4 : (Intensity_3bit + 3))) & 0x0f;
+        unsigned char alaw = (unsigned char)(sign | Intensity_3bit << 4 | HighSample_4bit);
+
+        return (unsigned char)(alaw ^0xD5); //1101 0101      
 } 
 
-int main()
-{
-    short src = 0x0C8A;
-    unsigned char dst = encode(src);
+int main(int argc, char *argv[]) {
+    FILE *fpin = NULL;
+    FILE *fout = NULL;
 
-    printf("%x\n", dst);
+    char tmp;
+    short int pcm_val;
+
+    fpin = fopen("./hsggx_44100_stereo.pcm", "rb");
+    fout = fopen("./8bitalaw.g711a", "w+b");
+
+    while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) {
+        tmp = encode(pcm_val);  // 16bit in, 8bit out
+        fputc(tmp, fout);
+    }
+
+    fclose(fpin);
+    fclose(fout);
+    return 0;
 }
