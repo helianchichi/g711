@@ -1,5 +1,8 @@
 8bitalaw.g711a
 8bitulaw.g711u
+16bitalawdec.pcm
+16bitulawdec.pcm
+
 g711aenc
 g711adec
 g711uenc
