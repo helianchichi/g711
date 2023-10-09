@@ -21,20 +21,8 @@ int main(int argc, char *argv[]) {
     FILE *fout = NULL;
 
     char tmp;
-    short int pcm_val;// = 1234;
+    short int pcm_val = 1234;
 
-    fpin = fopen("./hsggx_44100_stereo.pcm", "rb");
-    fout = fopen("./outputfile/8bitulaw.g711u", "w+b");
-    
-    if(fpin && fout)
-    {
-        while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) {
-            tmp = encode(pcm_val);  // 16bit in, 8bit out
-            fputc(tmp, fout);
-        }
-
-        fclose(fpin);
-        fclose(fout);
-    }
+    printf("pcm_val = %X ----> %X\n", pcm_val, encode(pcm_val));
     return 0;
 }
