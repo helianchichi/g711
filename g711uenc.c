@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     FILE *fout = NULL;
 
     char tmp;
-    short int pcm_val;// = 1234;
+    short int pcm_val;
 
     fpin = fopen("./hsggx_44100_stereo.pcm", "rb");
     fout = fopen("./outputfile/8bitulaw.g711u", "w+b");
