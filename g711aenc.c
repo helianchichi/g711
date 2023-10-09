@@ -23,14 +23,17 @@ int main(int argc, char *argv[]) {
     short int pcm_val;
 
     fpin = fopen("./hsggx_44100_stereo.pcm", "rb");
-    fout = fopen("./8bitalaw.g711a", "w+b");
+    fout = fopen("./outputfile/8bitalaw.g711a", "w+b");
 
-    while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) {
-        tmp = encode(pcm_val);  // 16bit in, 8bit out
-        fputc(tmp, fout);
+    if(fpin && fout)
+    {
+        while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) {
+            tmp = encode(pcm_val);  // 16bit in, 8bit out
+            fputc(tmp, fout);
+        }
+
+        fclose(fpin);
+        fclose(fout);
     }
-
-    fclose(fpin);
-    fclose(fout);
     return 0;
 }
