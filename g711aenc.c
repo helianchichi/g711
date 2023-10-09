@@ -15,7 +15,8 @@ unsigned char encode(short src)//-32768 ~ 32767
         return (unsigned char)(alaw ^0xD5); //1101 0101      
 } 
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
     FILE *fpin = NULL;
     FILE *fout = NULL;
 
@@ -27,7 +28,8 @@ int main(int argc, char *argv[]) {
 
     if(fpin && fout)
     {
-        while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) {
+        while (1 == fread(&pcm_val, sizeof(short int), 1, fpin)) 
+        {
             tmp = encode(pcm_val);  // 16bit in, 8bit out
             fputc(tmp, fout);
         }
